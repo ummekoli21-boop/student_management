@@ -1,39 +1,44 @@
 <?php
 require_once 'config.php';
 
-$query = "SELECT * FROM students";
+// সার্চ টার্ম রিসিভ করা
+$search = "";
+if (isset($_GET['search'])) {
+    $search = mysqli_real_escape_string($conn, $_GET['search']);
+    // ID, Name অথবা Department দিয়ে ফিল্টার করার কুয়েরি
+    $query = "SELECT * FROM students WHERE 
+              student_id LIKE '%$search%' OR 
+              student_name LIKE '%$search%' OR 
+              department LIKE '%$search%'";
+} else {
+    $query = "SELECT * FROM students";
+}
+
 $result = mysqli_query($conn, $query);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Management System</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; text-align: center; }
-        .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h1 { color: #333; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: #fff; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #eef2f3; color: #333; font-weight: bold; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        tr:hover { background-color: #f1f1f1; }
-        .btn-add { display: inline-block; padding: 10px 20px; background-color: #5cb85c; color: white; text-decoration: none; border-radius: 4px; margin-bottom: 20px; font-weight: bold; }
-        .btn-add:hover { background-color: #4cae4c; }
-        .btn-edit { color: #0275d8; text-decoration: none; font-weight: bold; }
-        .btn-edit:hover { text-decoration: underline; }
-        .btn-delete { color: #d9534f; text-decoration: none; font-weight: bold; }
-        .btn-delete:hover { text-decoration: underline; }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
 <div class="container">
-    <h1>Student Management System</h1>
+    <h2>Student Management System</h2>
     
-    <a href="add.php" class="btn-add">Add New Student</a>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <a href="add_student.php" class="btn" style="margin-bottom: 0;">Add New Student</a>
+        
+        <!-- সার্চ ফর্ম -->
+        <form method="GET" action="index.php" style="display: flex; gap: 5px;">
+            <input type="text" name="search" placeholder="Search ID, Name, Dept..." value="<?php echo htmlspecialchars($search); ?>" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+            <button type="submit" class="btn" style="margin-bottom: 0; background-color: #007bff;">Search</button>
+            <?php if (!empty($search)) { ?>
+                <a href="index.php" class="btn btn-warning" style="margin-bottom: 0;">Reset</a>
+            <?php } ?>
+        </form>
+    </div>
 
     <table>
         <thead>
@@ -50,33 +55,34 @@ $result = mysqli_query($conn, $query);
             </tr>
         </thead>
         <tbody>
-            <?php
+            <?php 
             if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($row['student_id']); ?></td>
-                        <td><?php echo htmlspecialchars($row['student_name']); ?></td>
-                        <td><?php echo htmlspecialchars($row['department']); ?></td>
-                        <td><?php echo htmlspecialchars($row['semester']); ?></td>
-                        <td><?php echo htmlspecialchars($row['gender']); ?></td>
-                        <td><?php echo htmlspecialchars($row['phone']); ?></td>
-                        <td><?php echo htmlspecialchars($row['email']); ?></td>
-                        <td><?php echo htmlspecialchars($row['Address']); ?></td>
-                        <td>
-                            <a href="edit.php?id=<?php echo urlencode($row['student_id']); ?>" class="btn-edit">Edit</a> | 
-                            <a href="delete.php?id=<?php echo urlencode($row['student_id']); ?>" class="btn-delete" onclick="return confirm('Are you sure you want to delete this student?')">Delete</a>
-                        </td>
-                    </tr>
-                    <?php
-                }
-            } else {
-                echo "<tr><td colspan='9' style='text-align:center;'>No records found</td></tr>";
-            }
+                while($row = mysqli_fetch_assoc($result)) { 
             ?>
+            <tr>
+                <td><?php echo $row['student_id']; ?></td>
+                <td><?php echo $row['student_name']; ?></td>
+                <td><?php echo $row['department']; ?></td>
+                <td><?php echo $row['semester']; ?></td>
+                <td><?php echo $row['gender']; ?></td>
+                <td><?php echo $row['phone']; ?></td>
+                <td><?php echo $row['email']; ?></td>
+                <?php echo isset($row['address']) ? $row['address'] : ''; ?>
+                <td>
+                    <a href="edit.php?id=<?php echo $row['student_id']; ?>" class="btn btn-warning">Edit</a>
+                    <a href="delete_student.php?id=<?php echo $row['student_id']; ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+                </td>
+            </tr>
+            <?php 
+                } 
+            } else { 
+            ?>
+            <tr>
+                <td colspan="9" style="text-align: center; color: red;">No student records found!</td>
+            </tr>
+            <?php } ?>
         </tbody>
     </table>
 </div>
-
 </body>
 </html>
