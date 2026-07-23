@@ -3,39 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Management System</title>
+  <title>Student Data - User View</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body {
-      height: 100vh; display: flex; justify-content: center; align-items: center;
-      background: linear-gradient(135deg, #3b82f6, #06b6d4); color: #fff; text-align: center;
-    }
-    .card {
-      background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px);
-      padding: 40px 30px; border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-      max-width: 450px; width: 90%; border: 1px solid rgba(255, 255, 255, 0.25);
-    }
-    h1 { font-size: 2rem; margin-bottom: 25px; font-weight: 700; }
-    .btn-container { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
-    .btn {
-      display: inline-block; padding: 12px 24px; font-size: 0.95rem; color: #4f46e5;
-      background-color: #ffffff; text-decoration: none; border-radius: 30px;
-      font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    .btn:hover { transform: translateY(-2px); background-color: #f8fafc; }
-    .btn-admin { background-color: #1e293b; color: #fff; }
-    .btn-admin:hover { background-color: #0f172a; }
+    body { background-color: #f4f6f9; color: #333; padding: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .header h2 { color: #333; font-size: 1.8rem; }
+    .back-btn { text-decoration: none; color: #4f46e5; font-weight: bold; background: #e0e7ff; padding: 8px 16px; border-radius: 8px; }
+    .controls-card { background: #fff; padding: 15px 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .search-box input { padding: 8px 14px; border: 1px solid #d1d5db; border-radius: 6px; outline: none; width: 250px; }
+    .table-container { background: #fff; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid #f3f4f6; }
+    th { background-color: #f8fafc; color: #1e293b; font-weight: 700; border-bottom: 2px solid #e2e8f0; }
+    tr:hover { background-color: #f8fafc; }
+    .badge { background: #e0e7ff; color: #4f46e5; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>Student Management System</h1>
-    <div class="btn-container">
-      <a href="dashboard.html" class="btn">User View</a>
-      <a href="admin.html" class="btn btn-admin">Admin Panel</a>
+  <div class="container">
+    <div class="header">
+      <h2>Student Data <span class="badge">User View</span></h2>
+      <a href="index.html" class="back-btn">← Home</a>
+    </div>
+
+    <div class="controls-card">
+      <p style="color: #6b7280; font-size: 0.9rem;">View-only mode for students/guests.</p>
+      <div class="search-box">
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search ID, Name, Dept...">
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table id="studentTable">
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Semester</th>
+            <th>Gender</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>242-115-227</td><td>Umme koli</td><td>CSE</td><td>6th</td><td>Female</td><td>0161234568</td><td>koli@gmail.com</td><td></td>
+          </tr>
+          <tr>
+            <td>242-115-228</td><td>Halima Jnnat</td><td>CSE</td><td>6th</td><td>Female</td><td>01752637687</td><td>halima@gmail.com</td><td></td>
+          </tr>
+          <tr>
+            <td>242-115-229</td><td>Rahnuma tahi</td><td>CSE</td><td>6th</td><td>Female</td><td>01787667555</td><td>rahnuma@gmail.com</td><td></td>
+          </tr>
+          <tr>
+            <td>242-115-230</td><td>Sabiha sami</td><td>CSE</td><td>6th</td><td>Female</td><td>01725367892</td><td>sabiha@gmail.com</td><td></td>
+          </tr>
+          <tr>
+            <td>242-115-231</td><td>Tahiya akter</td><td>CSE</td><td>6th</td><td>female</td><td>01779766755</td><td>tahiya@gmail.com</td><td></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
+  <script>
+    function searchTable() {
+      let filter = document.getElementById("searchInput").value.toLowerCase();
+      let rows = document.getElementById("studentTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+      for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent || rows[i].innerText;
+        rows[i].style.display = text.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+      }
+    }
+  </script>
 </body>
 </html>
