@@ -5,62 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Management System</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body {
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #3b82f6, #06b6d4);
-      color: #fff;
-      text-align: center;
+      height: 100vh; display: flex; justify-content: center; align-items: center;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4); color: #fff; text-align: center;
     }
     .card {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 50px 40px;
-      border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-      max-width: 450px;
-      width: 90%;
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px);
+      padding: 40px 30px; border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      max-width: 450px; width: 90%; border: 1px solid rgba(255, 255, 255, 0.25);
     }
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 30px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
+    h1 { font-size: 2rem; margin-bottom: 25px; font-weight: 700; }
+    .btn-container { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
     .btn {
-      display: inline-block;
-      padding: 12px 30px;
-      font-size: 1rem;
-      color: #4f46e5;
-      background-color: #ffffff;
-      text-decoration: none;
-      border-radius: 30px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: inline-block; padding: 12px 24px; font-size: 0.95rem; color: #4f46e5;
+      background-color: #ffffff; text-decoration: none; border-radius: 30px;
+      font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-    .btn:hover {
-      transform: translateY(-2px);
-      background-color: #f8fafc;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    }
+    .btn:hover { transform: translateY(-2px); background-color: #f8fafc; }
+    .btn-admin { background-color: #1e293b; color: #fff; }
+    .btn-admin:hover { background-color: #0f172a; }
   </style>
 </head>
 <body>
 
   <div class="card">
     <h1>Student Management System</h1>
-    <a href="dashboard.html" class="btn">View Student Data</a>
+    <div class="btn-container">
+      <a href="dashboard.html" class="btn">User View</a>
+      <a href="admin.html" class="btn btn-admin">Admin Panel</a>
+    </div>
   </div>
 
 </body>
