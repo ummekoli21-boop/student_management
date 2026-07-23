@@ -1,85 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Data - User View</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #f4f6f9; color: #333; padding: 20px; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .header h2 { color: #333; font-size: 1.8rem; }
-    .back-btn { text-decoration: none; color: #4f46e5; font-weight: bold; background: #e0e7ff; padding: 8px 16px; border-radius: 8px; }
-    .controls-card { background: #fff; padding: 15px 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-    .search-box input { padding: 8px 14px; border: 1px solid #d1d5db; border-radius: 6px; outline: none; width: 250px; }
-    .table-container { background: #fff; border-radius: 12px; overflow-x: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem; }
-    th, td { padding: 12px 14px; border-bottom: 1px solid #f3f4f6; }
-    th { background-color: #f8fafc; color: #1e293b; font-weight: 700; border-bottom: 2px solid #e2e8f0; }
-    tr:hover { background-color: #f8fafc; }
-    .badge { background: #e0e7ff; color: #4f46e5; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+
+    <!-- Open Graph Meta Tags (WhatsApp Link Preview Fixed) -->
+    <meta property="og:title" content="Student Management System" />
+    <meta property="og:description" content="Select User View or Admin Panel" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ummekoli21-boop.github.io/student_management/index.html" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            background: linear-gradient(135deg, #1fa2ff 0%, #12d8fa 50%, #06b6d4 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            max-width: 450px;
+            width: 90%;
+        }
+
+        .title {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 35px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-user {
+            background-color: #ffffff;
+            color: #1e293b;
+        }
+
+        .btn-user:hover {
+            background-color: #f1f5f9;
+            transform: translateY(-2px);
+        }
+
+        .btn-admin {
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+
+        .btn-admin:hover {
+            background-color: #1e293b;
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="header">
-      <h2>Student Data <span class="badge">User View</span></h2>
-      <a href="index.html" class="back-btn">← Home</a>
+    <div class="card">
+        <h1 class="title">Student Management System</h1>
+        <div class="btn-container">
+            <!-- আপনার ইউজার ভিউ পেজের নাম যদি dashboard.html হয় তবে নিচে dashboard.html লিখুন -->
+            <a href="dashboard.html" class="btn btn-user">User View</a>
+            
+            <!-- অ্যাডমিন পেজের নাম -->
+            <a href="admin.html" class="btn btn-admin">Admin Panel</a>
+        </div>
     </div>
 
-    <div class="controls-card">
-      <p style="color: #6b7280; font-size: 0.9rem;">View-only mode for students/guests.</p>
-      <div class="search-box">
-        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search ID, Name, Dept...">
-      </div>
-    </div>
-
-    <div class="table-container">
-      <table id="studentTable">
-        <thead>
-          <tr>
-            <th>Student ID</th>
-            <th>Name</th>
-            <th>Department</th>
-            <th>Semester</th>
-            <th>Gender</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Address</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>242-115-227</td><td>Umme koli</td><td>CSE</td><td>6th</td><td>Female</td><td>0161234568</td><td>koli@gmail.com</td><td></td>
-          </tr>
-          <tr>
-            <td>242-115-228</td><td>Halima Jnnat</td><td>CSE</td><td>6th</td><td>Female</td><td>01752637687</td><td>halima@gmail.com</td><td></td>
-          </tr>
-          <tr>
-            <td>242-115-229</td><td>Rahnuma tahi</td><td>CSE</td><td>6th</td><td>Female</td><td>01787667555</td><td>rahnuma@gmail.com</td><td></td>
-          </tr>
-          <tr>
-            <td>242-115-230</td><td>Sabiha sami</td><td>CSE</td><td>6th</td><td>Female</td><td>01725367892</td><td>sabiha@gmail.com</td><td></td>
-          </tr>
-          <tr>
-            <td>242-115-231</td><td>Tahiya akter</td><td>CSE</td><td>6th</td><td>female</td><td>01779766755</td><td>tahiya@gmail.com</td><td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <script>
-    function searchTable() {
-      let filter = document.getElementById("searchInput").value.toLowerCase();
-      let rows = document.getElementById("studentTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-      for (let i = 0; i < rows.length; i++) {
-        let text = rows[i].textContent || rows[i].innerText;
-        rows[i].style.display = text.toLowerCase().indexOf(filter) > -1 ? "" : "none";
-      }
-    }
-  </script>
 </body>
 </html>
