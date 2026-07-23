@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - Student Management</title>
+  <title>Student Data</title>
   <style>
     * {
       margin: 0;
@@ -12,12 +12,12 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     body {
-      background-color: #f3f4f6;
+      background-color: #f4f6f9;
       color: #333;
       padding: 20px;
     }
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
     }
     .header {
@@ -26,6 +26,10 @@
       align-items: center;
       margin-bottom: 20px;
     }
+    .header h2 {
+      color: #333;
+      font-size: 1.8rem;
+    }
     .back-btn {
       text-decoration: none;
       color: #4f46e5;
@@ -33,14 +37,18 @@
       background: #e0e7ff;
       padding: 8px 16px;
       border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .back-btn:hover {
+      background: #c7d2fe;
     }
 
     /* Top Compact Controls */
     .controls-card {
       background: #fff;
-      padding: 20px;
+      padding: 15px 20px;
       border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       margin-bottom: 20px;
       display: flex;
       flex-wrap: wrap;
@@ -48,53 +56,73 @@
       justify-content: space-between;
       align-items: center;
     }
-    .form-group, .search-group {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    input {
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      outline: none;
-    }
-    button {
-      padding: 8px 16px;
-      background-color: #4f46e5;
+    .btn-add {
+      padding: 9px 18px;
+      background-color: #10b981;
       color: white;
       border: none;
       border-radius: 6px;
-      cursor: pointer;
       font-weight: bold;
+      cursor: pointer;
     }
-    button:hover {
-      background-color: #4338ca;
+    .btn-add:hover {
+      background-color: #059669;
+    }
+    .search-box input {
+      padding: 8px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      outline: none;
+      width: 250px;
     }
 
     /* Table Styling */
     .table-container {
       background: #fff;
       border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      overflow-x: auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
+      font-size: 0.95rem;
     }
     th, td {
-      padding: 12px 16px;
-      border-bottom: 1px solid #eee;
+      padding: 12px 14px;
+      border-bottom: 1px solid #f3f4f6;
     }
     th {
-      background-color: #4f46e5;
-      color: white;
+      background-color: #f8fafc;
+      color: #1e293b;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
     }
     tr:hover {
-      background-color: #f9fafb;
+      background-color: #f8fafc;
+    }
+    
+    /* Action Buttons */
+    .btn-edit {
+      background-color: #f59e0b;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .btn-delete {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -102,43 +130,104 @@
 
   <div class="container">
     <div class="header">
-      <h2>Student Dashboard</h2>
+      <h2>Student Data</h2>
       <a href="index.html" class="back-btn">← Home</a>
     </div>
 
-    <!-- Compact Add & Search Box -->
+    <!-- Compact Controls Box -->
     <div class="controls-card">
-      <div class="form-group">
-        <input type="text" id="name" placeholder="Student Name">
-        <input type="text" id="roll" placeholder="Roll Number">
-        <button onclick="addStudent()">Add Student</button>
-      </div>
-
-      <div class="search-group">
-        <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search by name...">
+      <button class="btn-add">Add New Student</button>
+      <div class="search-box">
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search ID, Name, Dept...">
       </div>
     </div>
 
-    <!-- Table -->
+    <!-- Exact Original Table -->
     <div class="table-container">
       <table id="studentTable">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Student ID</th>
             <th>Name</th>
-            <th>Roll</th>
+            <th>Department</th>
+            <th>Semester</th>
+            <th>Gender</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>1</td>
-            <td>Rahim Ahmed</td>
-            <td>101</td>
+            <td>242-115-227</td>
+            <td>Umme koli</td>
+            <td>CSE</td>
+            <td>6th</td>
+            <td>Female</td>
+            <td>0161234568</td>
+            <td>koli@gmail.com</td>
+            <td></td>
+            <td>
+              <button class="btn-edit">Edit</button>
+              <button class="btn-delete">Delete</button>
+            </td>
           </tr>
           <tr>
-            <td>2</td>
-            <td>Karim Hasan</td>
-            <td>102</td>
+            <td>242-115-228</td>
+            <td>Halima Jnnat</td>
+            <td>CSE</td>
+            <td>6th</td>
+            <td>Female</td>
+            <td>01752637687</td>
+            <td>halima@gmail.com</td>
+            <td></td>
+            <td>
+              <button class="btn-edit">Edit</button>
+              <button class="btn-delete">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>242-115-229</td>
+            <td>Rahnuma tahi</td>
+            <td>CSE</td>
+            <td>6th</td>
+            <td>Female</td>
+            <td>01787667555</td>
+            <td>rahnuma@gmail.com</td>
+            <td></td>
+            <td>
+              <button class="btn-edit">Edit</button>
+              <button class="btn-delete">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>242-115-230</td>
+            <td>Sabiha sami</td>
+            <td>CSE</td>
+            <td>6th</td>
+            <td>Female</td>
+            <td>01725367892</td>
+            <td>sabiha@gmail.com</td>
+            <td></td>
+            <td>
+              <button class="btn-edit">Edit</button>
+              <button class="btn-delete">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>242-115-231</td>
+            <td>Tahiya akter</td>
+            <td>CSE</td>
+            <td>6th</td>
+            <td>female</td>
+            <td>01779766755</td>
+            <td>tahiya@gmail.com</td>
+            <td></td>
+            <td>
+              <button class="btn-edit">Edit</button>
+              <button class="btn-delete">Delete</button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -146,34 +235,16 @@
   </div>
 
   <script>
-    function addStudent() {
-      let name = document.getElementById("name").value;
-      let roll = document.getElementById("roll").value;
-      
-      if (!name || !roll) {
-        alert("Please fill all fields!");
-        return;
-      }
-
-      let table = document.getElementById("studentTable").getElementsByTagName('tbody')[0];
-      let rowCount = table.rows.length + 1;
-      let newRow = table.insertRow();
-
-      newRow.innerHTML = `<td>${rowCount}</td><td>${name}</td><td>${roll}</td>`;
-
-      document.getElementById("name").value = "";
-      document.getElementById("roll").value = "";
-    }
-
-    function searchStudent() {
-      let input = document.getElementById("searchInput").value.toLowerCase();
+    function searchTable() {
+      let filter = document.getElementById("searchInput").value.toLowerCase();
       let rows = document.getElementById("studentTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
 
       for (let i = 0; i < rows.length; i++) {
-        let nameCell = rows[i].getElementsByTagName("td")[1];
-        if (nameCell) {
-          let nameText = nameCell.textContent || nameCell.innerText;
-          rows[i].style.display = nameText.toLowerCase().indexOf(input) > -1 ? "" : "none";
+        let text = rows[i].textContent || rows[i].innerText;
+        if (text.toLowerCase().indexOf(filter) > -1) {
+          rows[i].style.display = "";
+        } else {
+          rows[i].style.display = "none";
         }
       }
     }
