@@ -43,7 +43,7 @@
       background: #c7d2fe;
     }
 
-    /* Top Compact Controls */
+    /* Top Controls */
     .controls-card {
       background: #fff;
       padding: 15px 20px;
@@ -113,6 +113,7 @@
       cursor: pointer;
       font-size: 0.8rem;
       font-weight: bold;
+      margin-right: 4px;
     }
     .btn-delete {
       background-color: #ef4444;
@@ -122,6 +123,66 @@
       border-radius: 4px;
       cursor: pointer;
       font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    /* Modal / Form Pop-up */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .modal-content h3 {
+      margin-bottom: 15px;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .modal-btns {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .btn-save {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-cancel {
+      background: #9ca3af;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
       font-weight: bold;
     }
   </style>
@@ -134,15 +195,15 @@
       <a href="index.html" class="back-btn">← Home</a>
     </div>
 
-    <!-- Compact Controls Box -->
+    <!-- Compact Controls -->
     <div class="controls-card">
-      <button class="btn-add">Add New Student</button>
+      <button class="btn-add" onclick="openAddModal()">Add New Student</button>
       <div class="search-box">
         <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search ID, Name, Dept...">
       </div>
     </div>
 
-    <!-- Exact Original Table -->
+    <!-- Data Table -->
     <div class="table-container">
       <table id="studentTable">
         <thead>
@@ -169,8 +230,8 @@
             <td>koli@gmail.com</td>
             <td></td>
             <td>
-              <button class="btn-edit">Edit</button>
-              <button class="btn-delete">Delete</button>
+              <button class="btn-edit" onclick="editRow(this)">Edit</button>
+              <button class="btn-delete" onclick="deleteRow(this)">Delete</button>
             </td>
           </tr>
           <tr>
@@ -183,8 +244,8 @@
             <td>halima@gmail.com</td>
             <td></td>
             <td>
-              <button class="btn-edit">Edit</button>
-              <button class="btn-delete">Delete</button>
+              <button class="btn-edit" onclick="editRow(this)">Edit</button>
+              <button class="btn-delete" onclick="deleteRow(this)">Delete</button>
             </td>
           </tr>
           <tr>
@@ -197,8 +258,8 @@
             <td>rahnuma@gmail.com</td>
             <td></td>
             <td>
-              <button class="btn-edit">Edit</button>
-              <button class="btn-delete">Delete</button>
+              <button class="btn-edit" onclick="editRow(this)">Edit</button>
+              <button class="btn-delete" onclick="deleteRow(this)">Delete</button>
             </td>
           </tr>
           <tr>
@@ -211,8 +272,8 @@
             <td>sabiha@gmail.com</td>
             <td></td>
             <td>
-              <button class="btn-edit">Edit</button>
-              <button class="btn-delete">Delete</button>
+              <button class="btn-edit" onclick="editRow(this)">Edit</button>
+              <button class="btn-delete" onclick="deleteRow(this)">Delete</button>
             </td>
           </tr>
           <tr>
@@ -225,8 +286,8 @@
             <td>tahiya@gmail.com</td>
             <td></td>
             <td>
-              <button class="btn-edit">Edit</button>
-              <button class="btn-delete">Delete</button>
+              <button class="btn-edit" onclick="editRow(this)">Edit</button>
+              <button class="btn-delete" onclick="deleteRow(this)">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -234,20 +295,132 @@
     </div>
   </div>
 
+  <!-- Modal / Form Window -->
+  <div class="modal" id="studentModal">
+    <div class="modal-content">
+      <h3 id="modalTitle">Add New Student</h3>
+      <div class="form-group"><label>Student ID</label><input type="text" id="sId"></div>
+      <div class="form-group"><label>Name</label><input type="text" id="sName"></div>
+      <div class="form-group"><label>Department</label><input type="text" id="sDept"></div>
+      <div class="form-group"><label>Semester</label><input type="text" id="sSem"></div>
+      <div class="form-group"><label>Gender</label><input type="text" id="sGender"></div>
+      <div class="form-group"><label>Phone</label><input type="text" id="sPhone"></div>
+      <div class="form-group"><label>Email</label><input type="text" id="sEmail"></div>
+      <div class="form-group"><label>Address</label><input type="text" id="sAddress"></div>
+      
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-save" onclick="saveStudent()">Save</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    let currentRow = null;
+
+    function openAddModal() {
+      currentRow = null;
+      document.getElementById('modalTitle').innerText = "Add New Student";
+      clearForm();
+      document.getElementById('studentModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('studentModal').style.display = 'none';
+    }
+
+    function clearForm() {
+      document.getElementById('sId').value = "";
+      document.getElementById('sName').value = "";
+      document.getElementById('sDept').value = "";
+      document.getElementById('sSem').value = "";
+      document.getElementById('sGender').value = "";
+      document.getElementById('sPhone').value = "";
+      document.getElementById('sEmail').value = "";
+      document.getElementById('sAddress').value = "";
+    }
+
+    function saveStudent() {
+      let id = document.getElementById('sId').value;
+      let name = document.getElementById('sName').value;
+      let dept = document.getElementById('sDept').value;
+      let sem = document.getElementById('sSem').value;
+      let gender = document.getElementById('sGender').value;
+      let phone = document.getElementById('sPhone').value;
+      let email = document.getElementById('sEmail').value;
+      let address = document.getElementById('sAddress').value;
+
+      if(!id || !name) {
+        alert("Please enter at least Student ID and Name!");
+        return;
+      }
+
+      if(currentRow === null) {
+        // Add new row
+        let tbody = document.getElementById("studentTable").getElementsByTagName('tbody')[0];
+        let newRow = tbody.insertRow();
+        newRow.innerHTML = `
+          <td>${id}</td>
+          <td>${name}</td>
+          <td>${dept}</td>
+          <td>${sem}</td>
+          <td>${gender}</td>
+          <td>${phone}</td>
+          <td>${email}</td>
+          <td>${address}</td>
+          <td>
+            <button class="btn-edit" onclick="editRow(this)">Edit</button>
+            <button class="btn-delete" onclick="deleteRow(this)">Delete</button>
+          </td>
+        `;
+      } else {
+        // Update existing row
+        currentRow.cells[0].innerText = id;
+        currentRow.cells[1].innerText = name;
+        currentRow.cells[2].innerText = dept;
+        currentRow.cells[3].innerText = sem;
+        currentRow.cells[4].innerText = gender;
+        currentRow.cells[5].innerText = phone;
+        currentRow.cells[6].innerText = email;
+        currentRow.cells[7].innerText = address;
+      }
+
+      closeModal();
+    }
+
+    function editRow(button) {
+      currentRow = button.parentNode.parentNode;
+      document.getElementById('modalTitle').innerText = "Edit Student";
+      
+      document.getElementById('sId').value = currentRow.cells[0].innerText;
+      document.getElementById('sName').value = currentRow.cells[1].innerText;
+      document.getElementById('sDept').value = currentRow.cells[2].innerText;
+      document.getElementById('sSem').value = currentRow.cells[3].innerText;
+      document.getElementById('sGender').value = currentRow.cells[4].innerText;
+      document.getElementById('sPhone').value = currentRow.cells[5].innerText;
+      document.getElementById('sEmail').value = currentRow.cells[6].innerText;
+      document.getElementById('sAddress').value = currentRow.cells[7].innerText;
+
+      document.getElementById('studentModal').style.display = 'flex';
+    }
+
+    function deleteRow(button) {
+      if(confirm("Are you sure you want to delete this student?")) {
+        let row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+      }
+    }
+
     function searchTable() {
       let filter = document.getElementById("searchInput").value.toLowerCase();
       let rows = document.getElementById("studentTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
 
       for (let i = 0; i < rows.length; i++) {
         let text = rows[i].textContent || rows[i].innerText;
-        if (text.toLowerCase().indexOf(filter) > -1) {
-          rows[i].style.display = "";
-        } else {
-          rows[i].style.display = "none";
-        }
+        rows[i].style.display = text.toLowerCase().indexOf(filter) > -1 ? "" : "none";
       }
     }
   </script>
 </body>
 </html>
+           
