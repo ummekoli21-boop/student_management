@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Student Management</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #f3f4f6;
+      color: #333;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .back-btn {
+      text-decoration: none;
+      color: #4f46e5;
+      font-weight: bold;
+      background: #e0e7ff;
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+
+    /* Top Compact Controls */
+    .controls-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .form-group, .search-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #4338ca;
+    }
+
+    /* Table Styling */
+    .table-container {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #eee;
+    }
+    th {
+      background-color: #4f46e5;
+      color: white;
+    }
+    tr:hover {
+      background-color: #f9fafb;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h2>Student Dashboard</h2>
+      <a href="index.html" class="back-btn">← Home</a>
+    </div>
+
+    <!-- Compact Add & Search Box -->
+    <div class="controls-card">
+      <div class="form-group">
+        <input type="text" id="name" placeholder="Student Name">
+        <input type="text" id="roll" placeholder="Roll Number">
+        <button onclick="addStudent()">Add Student</button>
+      </div>
+
+      <div class="search-group">
+        <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="Search by name...">
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <table id="studentTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Roll</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Rahim Ahmed</td>
+            <td>101</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Karim Hasan</td>
+            <td>102</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function addStudent() {
+      let name = document.getElementById("name").value;
+      let roll = document.getElementById("roll").value;
+      
+      if (!name || !roll) {
+        alert("Please fill all fields!");
+        return;
+      }
+
+      let table = document.getElementById("studentTable").getElementsByTagName('tbody')[0];
+      let rowCount = table.rows.length + 1;
+      let newRow = table.insertRow();
+
+      newRow.innerHTML = `<td>${rowCount}</td><td>${name}</td><td>${roll}</td>`;
+
+      document.getElementById("name").value = "";
+      document.getElementById("roll").value = "";
+    }
+
+    function searchStudent() {
+      let input = document.getElementById("searchInput").value.toLowerCase();
+      let rows = document.getElementById("studentTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+      for (let i = 0; i < rows.length; i++) {
+        let nameCell = rows[i].getElementsByTagName("td")[1];
+        if (nameCell) {
+          let nameText = nameCell.textContent || nameCell.innerText;
+          rows[i].style.display = nameText.toLowerCase().indexOf(input) > -1 ? "" : "none";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
